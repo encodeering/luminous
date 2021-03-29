@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
+    implementation ("io.quarkus:quarkus-arc")
     implementation ("io.quarkus:quarkus-vertx")
     implementation ("io.quarkus:quarkus-vertx-web")
 
