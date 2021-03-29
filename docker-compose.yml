@@ -1,0 +1,9 @@
+version: '3.5'
+services:
+  partner:
+    image: "encodeering/luminous-partner:0.0.1-SNAPSHOT"
+    build:
+      context: system/partner
+      dockerfile: src/main/docker/Dockerfile
+    ports:
+      - "8080:8080"
