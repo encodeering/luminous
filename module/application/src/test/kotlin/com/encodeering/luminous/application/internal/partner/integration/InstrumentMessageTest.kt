@@ -1,4 +1,4 @@
-package com.encodeering.luminous.application.internal.partner.instrument
+package com.encodeering.luminous.application.internal.partner.integration
 
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString

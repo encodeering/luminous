@@ -1,4 +1,4 @@
-package com.encodeering.luminous.application.internal.partner.instrument
+package com.encodeering.luminous.application.internal.partner.integration
 
 import com.encodeering.luminous.application.api.partner.instrument.Instrument
 import com.encodeering.luminous.application.test.camel.launch
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 /**
  * @author clausen - encodeering@gmail.com
  */
-internal class InstrumentRouteTest: ContainerAwareTestSupport () {
+internal class PartnerRouteTest: ContainerAwareTestSupport () {
 
     val config by lazy { PartnerConfigMemory (URI.create ("${getContainerHost ("partner-instruments-test")}:${getContainerPort ("partner-instruments-test", 8080)}")) }
 
@@ -24,11 +24,11 @@ internal class InstrumentRouteTest: ContainerAwareTestSupport () {
 
     override fun createContainer (): GenericContainer<*> = PartnerContainer ("partner-instruments-test")
 
-    override fun createRouteBuilders (): Array<RoutesBuilder> = arrayOf (MockRoute (), InstrumentRoute (config))
+    override fun createRouteBuilders (): Array<RoutesBuilder> = arrayOf (MockRoute (), PartnerRoute (config))
 
     @Test
     fun `instruments should be read from the stream` () {
-        val mock = getMockEndpoint ("mock:track-instrument")
+        val mock = getMockEndpoint ("mock:partner-track-record")
             mock.expectedMinimumMessageCount (1)
             mock.expectedMessagesMatches ({
                 exchange: Exchange ->
@@ -44,7 +44,7 @@ internal class InstrumentRouteTest: ContainerAwareTestSupport () {
     private class MockRoute: RouteBuilder () {
 
         override fun configure () {
-            from ("direct:track-instrument").to ("mock:track-instrument")
+            from ("direct:partner-track-record").to ("mock:partner-track-record")
         }
 
     }

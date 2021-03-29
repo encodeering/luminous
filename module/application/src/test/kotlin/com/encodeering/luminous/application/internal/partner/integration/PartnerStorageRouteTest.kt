@@ -1,4 +1,4 @@
-package com.encodeering.luminous.application.internal.partner.instrument
+package com.encodeering.luminous.application.internal.partner.integration
 
 import com.encodeering.luminous.application.api.partner.instrument.Instrument
 import com.encodeering.luminous.application.api.partner.instrument.InstrumentRepository
@@ -16,24 +16,24 @@ import org.mockito.Mockito.verify
 /**
  * @author clausen - encodeering@gmail.com
  */
-internal class InstrumentStorageRouteTest: CamelTestSupport () {
+internal class PartnerStorageRouteTest: CamelTestSupport () {
 
     private val instruments: InstrumentRepository = mock (InstrumentRepository::class.java, RETURNS_DEEP_STUBS)
 
     override fun isUseAdviceWith () = true
 
-    override fun createRouteBuilder (): RoutesBuilder = InstrumentStorageRoute (instruments)
+    override fun createRouteBuilder (): RoutesBuilder = PartnerStorageRoute (instruments)
 
     @Test
     fun `messages should be addable to the repository` () = context.launch {
-        template.sendBodyAndHeaders ("direct:track-instrument", instrument, operations.add)
+        template.sendBodyAndHeaders ("direct:partner-track-record", instrument, operations.add)
 
         verify (instruments).add (instrument)
     }
 
     @Test
     fun `messages should be removable from the repository` () = context.launch {
-        template.sendBodyAndHeaders ("direct:track-instrument", instrument, operations.delete)
+        template.sendBodyAndHeaders ("direct:partner-track-record", instrument, operations.delete)
 
         verify (instruments).remove (instrument)
     }
@@ -41,7 +41,7 @@ internal class InstrumentStorageRouteTest: CamelTestSupport () {
     @Test
     fun `instruments will throw an exception if type is invalid` () = context.launch {
         val exception = assertThrows<CamelExecutionException> {
-            template.sendBodyAndHeaders ("direct:track-instrument", instrument, mapOf ("operation" to ""))
+            template.sendBodyAndHeaders ("direct:partner-track-record", instrument, mapOf ("operation" to ""))
         }
 
         assertThat (exception.cause).isInstanceOf (IllegalStateException::class.java)
