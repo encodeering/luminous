@@ -10,9 +10,8 @@ dependencies {
     implementation ("io.quarkus:quarkus-vertx-web")
 
     implementation (enforcedPlatform ("org.apache.camel:camel-bom:3.8.0"))
+    implementation ("org.apache.camel:camel-ahc-ws")
     implementation ("org.apache.camel:camel-core")
-    implementation ("org.apache.camel:camel-timer")
-    implementation ("org.apache.camel:camel-log")
 
     testImplementation ("org.apache.camel:camel-mock")
     testImplementation ("org.apache.camel:camel-test-junit5")
