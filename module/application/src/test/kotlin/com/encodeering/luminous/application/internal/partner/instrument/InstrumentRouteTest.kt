@@ -3,6 +3,7 @@ package com.encodeering.luminous.application.internal.partner.instrument
 import com.encodeering.luminous.application.test.camel.launch
 import com.encodeering.luminous.application.test.partner.PartnerConfigMemory
 import com.encodeering.luminous.application.test.partner.PartnerContainer
+import org.apache.camel.Exchange
 import org.apache.camel.RoutesBuilder
 import org.apache.camel.builder.AdviceWith.adviceWith
 import org.apache.camel.test.testcontainers.junit5.ContainerAwareTestSupport
@@ -33,6 +34,7 @@ internal class InstrumentRouteTest: ContainerAwareTestSupport () {
 
         val mock = getMockEndpoint ("mock:log:instruments")
             mock.expectedMinimumMessageCount (1)
+            mock.expectedMessagesMatches ({ exchange: Exchange -> exchange.message.body is InstrumentMessage })
 
         context.launch {
             assertMockEndpointsSatisfied (1, SECONDS)
