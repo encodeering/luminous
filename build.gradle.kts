@@ -23,6 +23,7 @@ configure (subprojects.filter { it.name != "module" }) {
     dependencies {
         implementation (kotlin ("stdlib-jdk8"))
         implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+        implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
         implementation ("org.slf4j:slf4j-api:1.7.30")
 
         implementation (enforcedPlatform ("io.quarkus:quarkus-bom:1.12.2.Final"))
