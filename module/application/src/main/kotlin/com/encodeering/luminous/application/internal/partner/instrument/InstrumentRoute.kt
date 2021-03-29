@@ -24,11 +24,15 @@ internal class InstrumentRoute (private val config: PartnerConfig): RouteBuilder
         from ("ahc-ws://${config.endpoint}/instruments").routeId ("partner-instruments")
             .transform ()
                 .message (this::instrumentify)
-            .to ("log:instruments")
+            .to ("direct:track-instrument")
     }
 
-    private fun instrumentify                           (message: Message): InstrumentMessage {
-        return json.decodeFromString<InstrumentMessage> (message.getBody (String::class.java))
+    private fun instrumentify                                     (message: Message): Instrument {
+        val instrument = json.decodeFromString<InstrumentMessage> (message.getBody (String::class.java))
+
+        message.setHeader (operation, instrument.type)
+
+        return instrument.data.asInstrument ()
     }
 
     private companion object {
@@ -63,3 +67,5 @@ internal data class InstrumentMessage (val data: Data, val type: Type) {
     enum class Type { ADD, DELETE }
 
 }
+
+internal fun InstrumentMessage.Data.asInstrument (): Instrument = Instrument (isin, description)
