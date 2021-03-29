@@ -3,6 +3,7 @@ group = "com.encodeering.luminous"
 plugins {
     java
     kotlin ("jvm")
+    id ("org.kordamp.gradle.jandex") version ("0.9.0")
 }
 
 allprojects {
@@ -17,6 +18,7 @@ allprojects {
 configure (subprojects.filter { it.name != "module" }) {
     apply (plugin = "org.gradle.java")
     apply (plugin = "org.jetbrains.kotlin.jvm")
+    apply (plugin = "org.kordamp.gradle.jandex")
 
     dependencies {
         implementation (kotlin ("stdlib-jdk8"))
