@@ -17,4 +17,7 @@ dependencies {
     testImplementation ("org.apache.camel:camel-mock")
     testImplementation ("org.apache.camel:camel-test-junit5")
     testImplementation ("org.apache.camel:camel-testcontainers-junit5")
+
+    testImplementation ("io.quarkus:quarkus-junit5")
+    testImplementation ("io.rest-assured:rest-assured")
 }
