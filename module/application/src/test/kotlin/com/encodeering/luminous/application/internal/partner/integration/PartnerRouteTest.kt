@@ -1,6 +1,5 @@
 package com.encodeering.luminous.application.internal.partner.integration
 
-import com.encodeering.luminous.application.api.partner.instrument.Instrument
 import com.encodeering.luminous.application.test.camel.launch
 import com.encodeering.luminous.application.test.partner.PartnerConfigMemory
 import com.encodeering.luminous.application.test.partner.PartnerContainer
@@ -11,6 +10,7 @@ import org.apache.camel.test.testcontainers.junit5.ContainerAwareTestSupport
 import org.junit.jupiter.api.Test
 import org.testcontainers.containers.GenericContainer
 import java.net.URI
+import java.time.Clock
 import java.util.concurrent.TimeUnit.SECONDS
 
 /**
@@ -24,16 +24,15 @@ internal class PartnerRouteTest: ContainerAwareTestSupport () {
 
     override fun createContainer (): GenericContainer<*> = PartnerContainer ("partner-instruments-test")
 
-    override fun createRouteBuilders (): Array<RoutesBuilder> = arrayOf (MockRoute (), PartnerRoute (config))
+    override fun createRouteBuilders (): Array<RoutesBuilder> = arrayOf (MockRoute (), PartnerRoute (config, Clock.systemUTC ()))
 
     @Test
-    fun `instruments should be read from the stream` () {
+    fun `data should be read from the stream` () {
         val mock = getMockEndpoint ("mock:partner-track-record")
             mock.expectedMinimumMessageCount (1)
             mock.expectedMessagesMatches ({
                 exchange: Exchange ->
-                exchange.message.body is Instrument &&
-                exchange.message.getHeader ("operation") is InstrumentMessage.Type
+                exchange.message.getHeader ("operation") in InstrumentMessage.Type.values ().toList () + QuoteMessage.Type.values ().toList ()
             })
 
         context.launch {
