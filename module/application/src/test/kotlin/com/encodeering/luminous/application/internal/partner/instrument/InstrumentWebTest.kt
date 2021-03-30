@@ -5,7 +5,7 @@ import com.encodeering.luminous.application.api.partner.instrument.InstrumentRep
 import com.encodeering.luminous.application.api.partner.quote.Quote
 import com.encodeering.luminous.application.api.partner.quote.QuoteRepository
 import com.encodeering.luminous.application.internal.partner.quote.QuoteRepositoryMemory
-import io.quarkus.test.Mock
+import io.quarkus.arc.AlternativePriority
 import io.quarkus.test.common.http.TestHTTPEndpoint
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
@@ -86,14 +86,14 @@ internal class InstrumentWebTest {
     internal class InstrumentRepositoryTestProvider {
 
         @Produces
-        @Mock
+        @AlternativePriority (1)
         fun instruments (): InstrumentRepository = InstrumentRepositoryMemory ().apply {
             add (Instrument ("VE1506683Q53", "hello"))
             add (Instrument ("LF681P504335", "world"))
         }
 
         @Produces
-        @Mock
+        @AlternativePriority (1)
         fun quotes (): QuoteRepository = QuoteRepositoryMemory ().apply {
             val timestamp = OffsetDateTime.parse ("2021-03-30T13:46:19.00+02:00")
 
