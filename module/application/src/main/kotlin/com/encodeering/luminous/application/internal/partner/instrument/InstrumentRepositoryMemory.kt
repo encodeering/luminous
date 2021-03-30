@@ -5,11 +5,13 @@ import com.encodeering.luminous.application.api.partner.instrument.InstrumentRep
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import javax.enterprise.context.ApplicationScoped
+import javax.inject.Named
 
 /**
  * @author clausen - encodeering@gmail.com
  */
 @ApplicationScoped
+@Named ("instrument.repository")
 internal class InstrumentRepositoryMemory: InstrumentRepository {
 
     private val instruments: ConcurrentMap<String, Instrument> = ConcurrentHashMap ()

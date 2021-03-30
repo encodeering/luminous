@@ -8,11 +8,13 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
 import javax.enterprise.context.ApplicationScoped
+import javax.inject.Named
 
 /**
  * @author clausen - encodeering@gmail.com
  */
 @ApplicationScoped
+@Named ("quote.repository")
 internal class QuoteRepositoryMemory: QuoteRepository {
 
     private val quotes: ConcurrentMap<String, Deque<Quote>> = ConcurrentHashMap ()

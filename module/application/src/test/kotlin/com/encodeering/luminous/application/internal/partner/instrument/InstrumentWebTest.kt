@@ -86,14 +86,14 @@ internal class InstrumentWebTest {
     internal class InstrumentRepositoryTestProvider {
 
         @Produces
-        @AlternativePriority (1)
+        @AlternativePriority (2)
         fun instruments (): InstrumentRepository = InstrumentRepositoryMemory ().apply {
             add (Instrument ("VE1506683Q53", "hello"))
             add (Instrument ("LF681P504335", "world"))
         }
 
         @Produces
-        @AlternativePriority (1)
+        @AlternativePriority (2)
         fun quotes (): QuoteRepository = QuoteRepositoryMemory ().apply {
             val timestamp = OffsetDateTime.parse ("2021-03-30T13:46:19.00+02:00")
 
