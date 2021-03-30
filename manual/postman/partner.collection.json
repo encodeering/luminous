@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "f84a2d88-2fd7-4897-b4bc-59cbec4a0d1a",
+		"name": "partner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "all instruments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let instruments = pm.response.json ();\r",
+							"\r",
+							"if (instruments.length > 0) {\r",
+							"    pm.collectionVariables.set (\"isin\", instruments[0].isin);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/instrument/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"instrument",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one instrument",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/instrument/{{isin}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"instrument",
+						"{{isin}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "isin",
+			"value": ""
+		}
+	]
+}
