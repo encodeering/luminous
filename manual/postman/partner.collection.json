@@ -69,6 +69,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "candle 1m",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/quote/{{isin}}/candle/1m",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"quote",
+						"{{isin}}",
+						"candle",
+						"1m"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
