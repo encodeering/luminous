@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  luminous:
+    image: "encodeering/luminous:0.0.1-SNAPSHOT"
+    ports:
+      - "80:80"
+    depends_on:
+      - partner
+    environment:
+      PARTNER_ENDPOINT: partner:8080

@@ -1,0 +1,18 @@
+FROM       adoptopenjdk:11-jre-hotspot
+
+ARG        user=www-data
+
+ENV        JAVA_OPTS=""
+
+EXPOSE     8080
+
+WORKDIR    /var/www/quarkus
+
+COPY       --chown=${user}:${user} build/quarkus-app/lib/               lib
+COPY       --chown=${user}:${user} build/quarkus-app/quarkus-run.jar    server.jar
+COPY       --chown=${user}:${user} build/quarkus-app/app/               app
+COPY       --chown=${user}:${user} build/quarkus-app/quarkus/           quarkus
+
+USER               ${user}
+
+ENTRYPOINT ["sh", "-c", "exec java ${JAVA_OPTS} -jar server.jar"]
