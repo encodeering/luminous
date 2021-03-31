@@ -12,6 +12,7 @@ import io.restassured.RestAssured.given
 import io.vertx.core.json.Json
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.OffsetDateTime
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
@@ -85,6 +86,8 @@ internal class InstrumentWebTest {
     @ApplicationScoped
     internal class InstrumentRepositoryTestProvider {
 
+        private val timestamp = OffsetDateTime.parse ("2021-03-30T13:46:19.00+02:00")
+
         @Produces
         @AlternativePriority (2)
         fun instruments (): InstrumentRepository = InstrumentRepositoryMemory ().apply {
@@ -94,9 +97,7 @@ internal class InstrumentWebTest {
 
         @Produces
         @AlternativePriority (2)
-        fun quotes (): QuoteRepository = QuoteRepositoryMemory ().apply {
-            val timestamp = OffsetDateTime.parse ("2021-03-30T13:46:19.00+02:00")
-
+        fun quotes (): QuoteRepository = QuoteRepositoryMemory (Clock.fixed (timestamp.plusMinutes (2).toInstant (), timestamp.offset)).apply {
             remember   ("VE1506683Q53")
 
             add (Quote ("VE1506683Q53", "234.345".toBigDecimal (), timestamp))

@@ -1,11 +1,14 @@
 package com.encodeering.luminous.application.internal.partner.quote
 
+import com.encodeering.luminous.application.api.io.TimeableWindowMutable
+import com.encodeering.luminous.application.api.io.unpack
 import com.encodeering.luminous.application.api.partner.quote.Quote
 import com.encodeering.luminous.application.api.partner.quote.QuoteRepository
+import com.encodeering.luminous.application.internal.io.TimeableWindowMemory
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.time.Clock
+import java.time.temporal.ChronoUnit.MINUTES
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentMap
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Named
@@ -15,23 +18,23 @@ import javax.inject.Named
  */
 @ApplicationScoped
 @Named ("quote.repository")
-internal class QuoteRepositoryMemory: QuoteRepository {
+internal class QuoteRepositoryMemory (private val clock: Clock): QuoteRepository {
 
-    private val quotes: ConcurrentMap<String, Deque<Quote>> = ConcurrentHashMap ()
+    private val quotes: ConcurrentMap<String, TimeableWindowMutable<Quote>> = ConcurrentHashMap ()
 
     override fun remember      (isin: String) {
-        quotes.computeIfAbsent (isin) { ConcurrentLinkedDeque () }
+        quotes.computeIfAbsent (isin) { TimeableWindowMemory (30, MINUTES, clock) }
     }
 
     override fun forget (isin: String) {
         quotes.remove   (isin)
     }
 
-    override fun all (isin: String): List<Quote> = quotes[isin]?.toList () ?: emptyList ()
+    override fun all (isin: String): List<Quote> = quotes[isin]?.unpack () ?: emptyList ()
 
-    override fun last (isin: String): Quote? = quotes[isin]?.lastOrNull ()
+    override fun last (isin: String): Quote? = quotes[isin]?.tail
 
-    override fun add (quote: Quote): Quote = quote.also { quotes[it.isin]?.addLast (it) ?: logger.warn ("Quote ($it) couldn't be stored as there is no instrument listed for the given isin") }
+    override fun add (quote: Quote): Quote = quote.also { quotes[it.isin]?.track (it) ?: logger.warn ("Quote ($it) couldn't be stored as there is no instrument listed for the given isin") }
 
     internal companion object {
 

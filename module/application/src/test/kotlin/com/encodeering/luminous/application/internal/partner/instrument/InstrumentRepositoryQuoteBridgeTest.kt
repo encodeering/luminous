@@ -5,6 +5,7 @@ import com.encodeering.luminous.application.api.partner.instrument.Instrument
 import com.encodeering.luminous.application.internal.partner.quote.QuoteRepositoryMemory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.OffsetDateTime
 import javax.annotation.Priority
 
@@ -16,7 +17,7 @@ internal class InstrumentRepositoryQuoteBridgeTest {
     @Test
     fun `add will remember the isin for further quoting` () {
         val instruments = InstrumentRepositoryMemory ()
-        val quotes = QuoteRepositoryMemory ()
+        val quotes = QuoteRepositoryMemory (clock)
 
         val         bridge = InstrumentRepositoryQuoteBridge (instruments, quotes)
 
@@ -33,7 +34,7 @@ internal class InstrumentRepositoryQuoteBridgeTest {
     @Test
     fun `remove will forger the isin for further quoting` () {
         val instruments = InstrumentRepositoryMemory ()
-        val quotes = QuoteRepositoryMemory ()
+        val quotes = QuoteRepositoryMemory (clock)
 
         val         bridge = InstrumentRepositoryQuoteBridge (instruments, quotes)
 
@@ -58,6 +59,8 @@ internal class InstrumentRepositoryQuoteBridgeTest {
         private val instrument = Instrument ("VE1506683Q53", "hello")
 
         private val quote = Quote (instrument.isin, "678.4324".toBigDecimal (), OffsetDateTime.now ())
+
+        private val clock = Clock.fixed (quote.timestamp.toInstant (), quote.timestamp.offset)
 
     }
 
